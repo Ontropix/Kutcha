@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Platform.Infrastructure
+namespace Kutcha.Infrastructure
 {
     internal static class Maybe
     {
