@@ -99,7 +99,9 @@ namespace Kutcha.MongoDb
         
         public async Task<List<TRoot>> ByLocationAsync(Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null)
         {
-            return await Collection.Find(MongoFilter.Near(field, GeoJson.Point(GeoJson.Geographic(longitude, latitude)) , maxDistance, minDistance)).ToListAsync();
+            return await Collection.Find(MongoFilter.Near(field,
+                GeoJson.Point(GeoJson.Geographic(longitude, latitude)) , maxDistance, minDistance)
+            ).ToListAsync();
         }
     }
 }

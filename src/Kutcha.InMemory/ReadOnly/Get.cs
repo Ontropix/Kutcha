@@ -73,9 +73,10 @@ namespace Kutcha.InMemory.ReadOnly
             return await Task.FromResult(FindOne(whereExpression));
         }
 
-        public Task<List<TRoot>> ByLocationAsync(Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null)
+        public Task<List<TRoot>> ByLocationAsync(
+            Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

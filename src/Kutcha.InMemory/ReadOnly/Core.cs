@@ -27,17 +27,17 @@ namespace Kutcha.InMemory.ReadOnly
 
         public Task CreateIndex(Expression<Func<TRoot, object>> field)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public Task CreateGeoIndex(Expression<Func<TRoot, object>> field)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public Task DropAllIndexes()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

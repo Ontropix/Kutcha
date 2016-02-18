@@ -31,7 +31,7 @@ namespace Kutcha.MongoDb
 
         public async Task SaveManyAsync(List<TRoot> roots)
         {
-            roots.ForEach(ValidateRoot);
+            await Task.Run(() => roots.ForEach(ValidateRoot));      
         }
     }
 }
