@@ -3,64 +3,57 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Kutcha.MongoDb
 {
     internal partial class MongoKutchaStore<TRoot>
     {
-        public List<TRoot> All()
+        public List<TRoot> GetAll()
         {
-            return AsyncHelpers.RunSync(() => AllAsync());
+            return Collection.Find(Filters.Empty).ToList();
         }
 
-        public async Task<List<TRoot>> AllAsync()
+        public async Task<List<TRoot>> GetAllAsync()
         {
-            return await Collection.Find(EmptyFilter).ToListAsync();
+            return await Collection.Find(Filters.Empty).ToListAsync();
         }
 
-        public TRoot FindById(string id)
-        {
-            Argument.StringNotEmpty(id, "id");
-            return AsyncHelpers.RunSync(() => FindByIdAsync(id));
-        }
-
-        public async Task<TRoot> FindByIdAsync(string id)
+        public TRoot GetById(string id)
         {
             Argument.StringNotEmpty(id, "id");
-            return await Collection.Find(MongoFilter.Eq(root => root.Id, id)).FirstOrDefaultAsync();
+            return Collection.Find(root => root.Id == id).FirstOrDefault();
         }
 
-        public List<TRoot> FindByIds(params string[] ids)
+        public async Task<TRoot> GetByIdAsync(string id)
+        {
+            Argument.StringNotEmpty(id, "id");
+            return await Collection.Find(root => root.Id == id).FirstOrDefaultAsync();
+        }
+
+        public List<TRoot> GetByIds(ICollection<string> ids)
         {
             Argument.ElementsNotEmpty(ids);
-            return AsyncHelpers.RunSync(() => FindByIdsAsync(ids));
+            return Collection.Find(Filters.In(root => root.Id, ids)).ToList();
         }
 
-        public async Task<List<TRoot>> FindByIdsAsync(params string[] ids)
+        public async Task<List<TRoot>> GetByIdsAsync(ICollection<string> ids)
         {
             Argument.ElementsNotEmpty(ids);
-            return await Collection.Find(MongoFilter.In(root => root.Id, ids)).ToListAsync();
+            return await Collection.Find(Filters.In(root => root.Id, ids)).ToListAsync();
         }
 
-        public List<TRoot> Find(Expression<Func<TRoot, bool>> whereExpression)
+        public List<TRoot> Where(Expression<Func<TRoot, bool>> whereExpression)
         {
             Argument.IsNotNull(whereExpression, "whereExpression");
-            return AsyncHelpers.RunSync(() => FindAsync(whereExpression));
+            return Collection.Find(whereExpression).ToList();
         }
 
-        public async Task<List<TRoot>> FindAsync(Expression<Func<TRoot, bool>> whereExpression)
+        public async Task<List<TRoot>> WhereAsync(Expression<Func<TRoot, bool>> whereExpression)
         {
             Argument.IsNotNull(whereExpression, "whereExpression");
             return await Collection.Find(whereExpression).ToListAsync();
         }
 
-        public async Task<List<TRoot>> FindAsync(Expression<Func<TRoot, bool>> whereExpression, int skip, int take)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return await Collection.Find(whereExpression).Skip(skip).Limit(take).ToListAsync();
-        }
-        
         public TRoot FindOne(Expression<Func<TRoot, bool>> whereExpression)
         {
             Argument.IsNotNull(whereExpression, "whereExpression");
@@ -76,32 +69,15 @@ namespace Kutcha.MongoDb
         public async Task<List<TRoot>> SortBy(Expression<Func<TRoot, object>> sortExpression, int skip, int take)
         {
             Argument.IsNotNull(sortExpression, "sortExpression");
-            return await Collection.Find(EmptyFilter).SortBy(sortExpression).Skip(skip).Limit(take).ToListAsync();
+            return await Collection.Find(Filters.Empty).SortBy(sortExpression).Skip(skip).Limit(take).ToListAsync();
         }
 
-        public async Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, object>> sortExpression, int skip, int take)
+        public async Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, object>> sortExpression, int skip,
+            int take)
         {
             Argument.IsNotNull(sortExpression, "sortExpression");
-            return await Collection.Find(EmptyFilter).SortByDescending(sortExpression).Skip(skip).Limit(take).ToListAsync();
-        }
-
-        public async Task<List<TRoot>> SortBy(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return await Collection.Find(whereExpression).SortBy(sortExpression).Skip(skip).Limit(take).ToListAsync();
-        }
-
-        public async Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return await Collection.Find(whereExpression).SortByDescending(sortExpression).Skip(skip).Limit(take).ToListAsync();
-        }
-        
-        public async Task<List<TRoot>> ByLocationAsync(Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null)
-        {
-            return await Collection.Find(MongoFilter.Near(field,
-                GeoJson.Point(GeoJson.Geographic(longitude, latitude)) , maxDistance, minDistance)
-            ).ToListAsync();
+            return
+                await Collection.Find(Filters.Empty).SortByDescending(sortExpression).Skip(skip).Limit(take).ToListAsync();
         }
     }
 }

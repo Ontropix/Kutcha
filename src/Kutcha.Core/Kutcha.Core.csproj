@@ -83,7 +83,7 @@
     <Compile Include="Extensions\KutchaRootExtensions.cs" />
     <Compile Include="Interfaces\IKutchaContext.cs" />
     <Compile Include="Interfaces\IKutchaStoreExtensions.cs" />
-    <Compile Include="Interfaces\IReadOnlyKutchaContext.cs" />
+    <Compile Include="Interfaces\IKutchaReadOnlyContext.cs" />
     <Compile Include="Interfaces\IKutchaReadOnlyStore.cs" />
     <Compile Include="Interfaces\IKutchaRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

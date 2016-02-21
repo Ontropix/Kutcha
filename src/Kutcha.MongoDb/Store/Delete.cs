@@ -15,7 +15,7 @@ namespace Kutcha.MongoDb
         public async Task DeleteByIdAsync(string id)
         {
             Argument.StringNotEmpty(id, "id");
-            await Collection.DeleteOneAsync(MongoFilter.Eq(root => root.Id, id));
+            await Collection.DeleteOneAsync(Filters.Eq(root => root.Id, id));
         }
 
         public void DeleteByIds(params string[] ids)
@@ -27,7 +27,7 @@ namespace Kutcha.MongoDb
         public async Task DeleteByIdsAsync(params string[] ids)
         {
             Argument.ElementsNotEmpty(ids);
-            await Collection.DeleteManyAsync(MongoFilter.In(root => root.Id, ids));
+            await Collection.DeleteManyAsync(Filters.In(root => root.Id, ids));
         }
 
         public void Delete(Expression<Func<TRoot, bool>> whereExpression)

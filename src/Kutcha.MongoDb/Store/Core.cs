@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Kutcha.Core;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Kutcha.MongoDb
@@ -10,17 +7,14 @@ namespace Kutcha.MongoDb
     internal partial class MongoKutchaStore<TRoot> : IKutchaStore<TRoot> where TRoot : class, IKutchaRoot, new()
     {
         protected readonly IMongoCollection<TRoot> Collection;
-        protected readonly FilterDefinitionBuilder<TRoot> MongoFilter;
-        protected readonly UpdateDefinitionBuilder<TRoot> MongoUpdate;
-        protected readonly IndexKeysDefinitionBuilder<TRoot> MongoIndex;
-        protected readonly BsonDocument EmptyFilter = new BsonDocument();
+        protected readonly FilterDefinitionBuilder<TRoot> Filters;
+        protected readonly UpdateDefinitionBuilder<TRoot> Update;
 
         public MongoKutchaStore(IMongoCollection<TRoot> collection)
         {
             Collection = collection;
-            MongoFilter = Builders<TRoot>.Filter;
-            MongoUpdate = Builders<TRoot>.Update;
-            MongoIndex = Builders<TRoot>.IndexKeys;
+            Filters = Builders<TRoot>.Filter;
+            Update = Builders<TRoot>.Update;
         }
         
         private void ValidateRoot(TRoot root)
@@ -31,27 +25,12 @@ namespace Kutcha.MongoDb
 
         public void Drop()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void Truncate()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task CreateIndex(Expression<Func<TRoot, object>> field)
-        {
-            await Collection.Indexes.CreateOneAsync(MongoIndex.Ascending(field));
-        }
-
-        public async Task CreateGeoIndex(Expression<Func<TRoot, object>> field)
-        {
-            await Collection.Indexes.CreateOneAsync(MongoIndex.Geo2DSphere(field));
-        }
-
-        public async Task DropAllIndexes()
-        {
-            await Collection.Indexes.DropAllAsync();
+            Collection.DeleteMany(Filters.Empty);
         }
     }
 }

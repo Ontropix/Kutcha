@@ -16,7 +16,7 @@ namespace Kutcha.MongoDb
         public async Task SaveAsync(TRoot root)
         {
             ValidateRoot(root);
-            await Collection.ReplaceOneAsync(MongoFilter.Eq(x => x.Id, root.Id),
+            await Collection.ReplaceOneAsync(Filters.Eq(x => x.Id, root.Id),
                                              root,
                                              new UpdateOptions()
                                              {

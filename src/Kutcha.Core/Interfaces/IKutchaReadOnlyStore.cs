@@ -11,26 +11,32 @@ namespace Kutcha.Core
     /// <typeparam name="TRoot">Class that implemented IDocument interface.</typeparam>
     public interface IKutchaReadOnlyStore<TRoot> where TRoot : class, IKutchaRoot, new()
     {
-        List<TRoot> All();
-        Task<List<TRoot>> AllAsync();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        List<TRoot> GetAll();
+        Task<List<TRoot>> GetAllAsync();
 
         /// <summary>
         /// Returns document by id. If document does not exists - method will return null.
         /// </summary>
-        TRoot FindById(string id);
-        Task<TRoot> FindByIdAsync(string id);
-
+        TRoot GetById(string id);
+        Task<TRoot> GetByIdAsync(string id);
         
         /// <summary>
         /// Returns documents by theirs ids (skips unfound documents).
         /// </summary>
-        List<TRoot> FindByIds(params string[] ids);
-        Task<List<TRoot>> FindByIdsAsync(params string[] ids);
-
-
-        List<TRoot> Find(Expression<Func<TRoot, bool>> whereExpression);
-        Task<List<TRoot>> FindAsync(Expression<Func<TRoot, bool>> whereExpression);
-        Task<List<TRoot>> FindAsync(Expression<Func<TRoot, bool>> whereExpression, int skip, int take);
+        List<TRoot> GetByIds(ICollection<string> ids);
+        Task<List<TRoot>> GetByIdsAsync(ICollection<string> ids);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="whereExpression"></param>
+        /// <returns></returns>
+        List<TRoot> Where(Expression<Func<TRoot, bool>> whereExpression);
+        Task<List<TRoot>> WhereAsync(Expression<Func<TRoot, bool>> whereExpression);
 
 
         TRoot FindOne(Expression<Func<TRoot, bool>> whereExpression);
@@ -38,13 +44,5 @@ namespace Kutcha.Core
 
         Task<List<TRoot>> SortBy(Expression<Func<TRoot, object>> sortExpression, int skip, int take);
         Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, object>> sortExpression, int skip, int take);
-        Task<List<TRoot>> SortBy(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take);
-        Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take);
-
-        Task<List<TRoot>> ByLocationAsync(Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null);
-
-        Task CreateIndex(Expression<Func<TRoot, object>> field);
-        Task CreateGeoIndex(Expression<Func<TRoot, object>> field);
-        Task DropAllIndexes();
     }
 }
