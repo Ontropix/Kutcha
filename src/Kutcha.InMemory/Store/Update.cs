@@ -12,7 +12,8 @@ namespace Kutcha.InMemory
 
         public async Task ReplaceAsync(TRoot root)
         {
-            await Task.Run(() => Replace(root));
+            Replace(root);
+            await Task.CompletedTask;
         }
     }
 }

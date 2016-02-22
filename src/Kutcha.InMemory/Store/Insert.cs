@@ -11,7 +11,7 @@ namespace Kutcha.InMemory
             ValidateRoot(root);
             if (Container.ContainsKey(root.Id))
             {
-                throw new InvalidOperationException(String.Format("Root with Id={0} already exists.", root.Id));
+                throw new InvalidOperationException($"Root with Id={root.Id} already exists.");
             }
 
             Container.TryAdd(root.Id, root);
@@ -19,18 +19,20 @@ namespace Kutcha.InMemory
 
         public async Task InsertAsync(TRoot root)
         {
-            await Task.Run(() => Insert(root));
+            Insert(root);
+            await Task.CompletedTask;
         }
 
-        public void InsertMany(List<TRoot> roots)
+        public void InsertMany(ICollection<TRoot> roots)
         {
             roots.ForEach(ValidateRoot);
             roots.ForEach(root => Container.TryAdd(root.Id, root));
         }
 
-        public async Task InsertManyAsync(List<TRoot> roots)
+        public async Task InsertManyAsync(ICollection<TRoot> roots)
         {
-            await Task.Run(() => InsertMany(roots));
+            InsertMany(roots);
+            await Task.CompletedTask;
         }
     }
 }

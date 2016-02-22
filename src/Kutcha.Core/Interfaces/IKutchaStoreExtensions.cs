@@ -49,7 +49,7 @@ namespace Kutcha.Core
 
         public static void FindOneAndUpdate<TRoot>(this IKutchaStore<TRoot> store, string id, Action<TRoot> updater) where TRoot : class, IKutchaRoot, new()
         {
-            TRoot root = store.GetById(id);
+            TRoot root = store.FindById(id);
             updater.Invoke(root);
             root.Id = id; //preventing wrong updates
             store.Replace(root);
@@ -57,7 +57,7 @@ namespace Kutcha.Core
 
         public static async Task FindOneAndUpdateAsync<TRoot>(this IKutchaStore<TRoot> store, string id, Action<TRoot> updater) where TRoot : class, IKutchaRoot, new()
         {
-            TRoot root = await store.GetByIdAsync(id);
+            TRoot root = await store.FindByIdAsync(id);
             updater.Invoke(root);
             root.Id = id; //preventing wrong updates
             await store.ReplaceAsync(root);

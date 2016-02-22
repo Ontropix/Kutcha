@@ -19,7 +19,7 @@ namespace Kutcha.InMemory.ReadOnly
             return await Task.FromResult(GetAll());
         }
 
-        public TRoot GetById(string id)
+        public TRoot FindById(string id)
         {
             Argument.StringNotEmpty(id, "id");
 
@@ -28,65 +28,33 @@ namespace Kutcha.InMemory.ReadOnly
             return root;
         }
 
-        public async Task<TRoot> GetByIdAsync(string id)
+        public async Task<TRoot> FindByIdAsync(string id)
         {
-            return await Task.FromResult(GetById(id));
-        }
-        
-        public List<TRoot> GetByIds(ICollection<string> ids)
-        {
-            throw new NotImplementedException();
+            return await Task.FromResult(FindById(id));
         }
 
-        public Task<List<TRoot>> GetByIdsAsync(ICollection<string> ids)
+        public TRoot FindOne(Expression<Func<TRoot, bool>> filter)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<TRoot> GetByIds(params string[] ids)
-        {
-            Argument.ElementsNotEmpty(ids);
-            return ids.Select(id => GetById(id)).Where(doc => doc != null).ToList();
-        }
-
-        public async Task<List<TRoot>> GetByIdsAsync(params string[] ids)
-        {
-            return await Task.FromResult(GetByIds(ids));
-        }
-
-        public List<TRoot> Where(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            Func<TRoot, bool> whereFunc = whereExpression.Compile();
-            return Container.Values.Where(document => whereFunc.Invoke(document)).ToList();
-        }
-
-        public async Task<List<TRoot>> WhereAsync(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            return await Task.FromResult(Where(whereExpression));
-        }
-
-        public async Task<List<TRoot>> FindAsync(Expression<Func<TRoot, bool>> whereExpression, int skip, int take)
-        {
-            return await Task.FromResult(Where(whereExpression).Skip(skip).Take(take).ToList());
-        }
-
-        public TRoot FindOne(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            Func<TRoot, bool> whereFunc = whereExpression.Compile();
+            Argument.IsNotNull(filter, "filter");
+            Func<TRoot, bool> whereFunc = filter.Compile();
             return Container.Values.FirstOrDefault(whereFunc);
         }
 
-        public async Task<TRoot> FindOneAsync(Expression<Func<TRoot, bool>> whereExpression)
+        public async Task<TRoot> FindOneAsync(Expression<Func<TRoot, bool>> filter)
         {
-            return await Task.FromResult(FindOne(whereExpression));
+            return await Task.FromResult(FindOne(filter));
         }
 
-        public Task<List<TRoot>> ByLocationAsync(
-            Expression<Func<TRoot, object>> field, double longitude, double latitude, double? maxDistance = null, double? minDistance = null)
+        public List<TRoot> FindMany(Expression<Func<TRoot, bool>> filter)
         {
-            throw new NotSupportedException();
+            Argument.IsNotNull(filter, "filter");
+            Func<TRoot, bool> whereFunc = filter.Compile();
+            return Container.Values.Where(document => whereFunc.Invoke(document)).ToList();
+        }
+
+        public async Task<List<TRoot>> FindManyAsync(Expression<Func<TRoot, bool>> filter)
+        {
+            return await Task.FromResult(FindMany(filter));
         }
     }
 }

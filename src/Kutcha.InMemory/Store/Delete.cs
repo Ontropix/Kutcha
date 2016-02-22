@@ -15,28 +15,14 @@ namespace Kutcha.InMemory
 
         public async Task DeleteByIdAsync(string id)
         {
-            await Task.Run(() => DeleteById(id));
+            DeleteById(id);
+            await Task.CompletedTask;
         }
 
-        public void DeleteByIds(params string[] ids)
+        public void Delete(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.ElementsNotEmpty(ids);
-            foreach (string id in ids)
-            {
-                DeleteById(id);
-            }
-        }
-
-        public async Task DeleteByIdsAsync(params string[] ids)
-        {
-            Argument.ElementsNotEmpty(ids);
-            await Task.Run(() => Parallel.ForEach(ids, id => DeleteByIds(id)));
-        }
-
-        public void Delete(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            Func<TRoot, bool> whereFunc = whereExpression.Compile();
+            Argument.IsNotNull(filter, "filter");
+            Func<TRoot, bool> whereFunc = filter.Compile();
 
             foreach (TRoot document in Container.Values)
             {
@@ -47,21 +33,10 @@ namespace Kutcha.InMemory
             }
         }
 
-        public async Task DeleteAsync(Expression<Func<TRoot, bool>> whereExpression)
+        public async Task DeleteAsync(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            Func<TRoot, bool> whereFunc = whereExpression.Compile();
-
-            await Task.Run(() =>
-            {
-                Parallel.ForEach(Container.Values, document =>
-                {
-                    if (whereFunc.Invoke(document))
-                    {
-                        DeleteById(document.Id);
-                    }
-                });
-            });
+            Delete(filter);
+            await Task.CompletedTask;
         }
     }
 }

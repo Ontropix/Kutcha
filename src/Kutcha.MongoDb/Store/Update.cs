@@ -17,15 +17,5 @@ namespace Kutcha.MongoDb
             ValidateRoot(root);
             await Collection.ReplaceOneAsync(x => x.Id == root.Id, root);
         }
-        
-        //public void UpdateField<TField>(Expression<Func<TRoot, bool>> @where, Expression<Func<TRoot, TField>> updater, TField value)
-        //{
-        //    AsyncHelpers.RunSync(() =>  Collection.UpdateManyAsync(where, Update.Set(updater, value)));
-        //}
-
-        //public async Task UpdateFieldAsync<TField>(Expression<Func<TRoot, bool>> @where, Expression<Func<TRoot, TField>> updater, TField value)
-        //{
-        //    await Collection.UpdateManyAsync(where, Update.Set(updater, value));
-        //}
     }
 }

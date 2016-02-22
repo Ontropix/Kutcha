@@ -9,7 +9,7 @@ namespace Kutcha.MongoDb
         public void DeleteById(string id)
         {
             Argument.StringNotEmpty(id, "id");
-            AsyncHelpers.RunSync(() => DeleteByIdAsync(id));
+            Collection.DeleteOne(Filters.Eq(root => root.Id, id));
         }
 
         public async Task DeleteByIdAsync(string id)
@@ -18,28 +18,16 @@ namespace Kutcha.MongoDb
             await Collection.DeleteOneAsync(Filters.Eq(root => root.Id, id));
         }
 
-        public void DeleteByIds(params string[] ids)
+        public void Delete(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.ElementsNotEmpty(ids);
-            AsyncHelpers.RunSync(() => DeleteByIdsAsync(ids));
+            Argument.IsNotNull(filter, "filter");
+            Collection.DeleteMany(filter);
         }
 
-        public async Task DeleteByIdsAsync(params string[] ids)
+        public async Task DeleteAsync(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.ElementsNotEmpty(ids);
-            await Collection.DeleteManyAsync(Filters.In(root => root.Id, ids));
-        }
-
-        public void Delete(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            AsyncHelpers.RunSync(() => DeleteAsync(whereExpression));
-        }
-
-        public async Task DeleteAsync(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            await Collection.DeleteManyAsync(whereExpression);
+            Argument.IsNotNull(filter, "filter");
+            await Collection.DeleteManyAsync(filter);
         }
     }
 }

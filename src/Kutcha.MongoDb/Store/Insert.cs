@@ -9,7 +9,7 @@ namespace Kutcha.MongoDb
         public void Insert(TRoot root)
         {
             ValidateRoot(root);
-            AsyncHelpers.RunSync(() => InsertAsync(root));
+            Collection.InsertOne(root);
         }
 
         public async Task InsertAsync(TRoot root)
@@ -18,13 +18,13 @@ namespace Kutcha.MongoDb
             await Collection.InsertOneAsync(root);
         }
 
-        public void InsertMany(List<TRoot> roots)
+        public void InsertMany(ICollection<TRoot> roots)
         {
             roots.ForEach(ValidateRoot);
-            AsyncHelpers.RunSync(() => InsertManyAsync(roots));
+            Collection.InsertMany(roots);
         }
 
-        public async Task InsertManyAsync(List<TRoot> roots)
+        public async Task InsertManyAsync(ICollection<TRoot> roots)
         {
             roots.ForEach(ValidateRoot);
             await Collection.InsertManyAsync(roots);

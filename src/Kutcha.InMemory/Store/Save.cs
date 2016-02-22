@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Kutcha.InMemory
 {
@@ -13,25 +12,8 @@ namespace Kutcha.InMemory
 
         public async Task SaveAsync(TRoot root)
         {
-            await Task.Run(() => Save(root));
-        }
-
-        public void SaveMany(List<TRoot> roots)
-        {
-            foreach (TRoot document in roots)
-            {
-                ValidateRoot(document);
-            }
-
-            foreach (TRoot document in roots)
-            {
-                Container.AddOrUpdate(document.Id, id => document, (id, existing) => document);
-            }
-        }
-
-        public async Task SaveManyAsync(List<TRoot> roots)
-        {
-            await Task.Run(() => SaveMany(roots));
+            Save(root);
+            await Task.CompletedTask;
         }
     }
 }

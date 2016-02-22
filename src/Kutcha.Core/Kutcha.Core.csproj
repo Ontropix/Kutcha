@@ -81,13 +81,13 @@
     <Compile Include="Conventions\IStoreNamingConvention.cs" />
     <Compile Include="Conventions\KutchaStoreNameAttribute.cs" />
     <Compile Include="Extensions\KutchaRootExtensions.cs" />
-    <Compile Include="Interfaces\IKutchaContext.cs" />
+    <Compile Include="Interfaces\Context\IKutchaContext.cs" />
     <Compile Include="Interfaces\IKutchaStoreExtensions.cs" />
-    <Compile Include="Interfaces\IKutchaReadOnlyContext.cs" />
-    <Compile Include="Interfaces\IKutchaReadOnlyStore.cs" />
+    <Compile Include="Interfaces\Context\IKutchaReadOnlyContext.cs" />
+    <Compile Include="Interfaces\Store\IKutchaReadOnlyStore.cs" />
     <Compile Include="Interfaces\IKutchaRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Interfaces\IKutchaStore.cs" />
+    <Compile Include="Interfaces\Store\IKutchaStore.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

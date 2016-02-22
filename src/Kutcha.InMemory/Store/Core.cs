@@ -11,5 +11,10 @@ namespace Kutcha.InMemory
             Argument.IsNotNull(root, "root");
             Argument.StringNotEmpty(root.Id, "root.Id");
         }
+        
+        public void Truncate()
+        {
+            Container.Clear();
+        }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Kutcha.Core;
 
 namespace Kutcha.InMemory.ReadOnly
@@ -13,32 +9,7 @@ namespace Kutcha.InMemory.ReadOnly
 
         public InMemoryKutchaReadOnlyStore()
         {
-            Container = new ConcurrentDictionary<String, TRoot>();
-        }
-        
-        public void Drop()
-        {
-            Container.Clear();
-        }
-
-        public void Truncate()
-        {
-            Container.Clear();
-        }
-
-        public Task CreateIndex(Expression<Func<TRoot, object>> field)
-        {
-            throw new NotSupportedException();
-        }
-
-        public Task CreateGeoIndex(Expression<Func<TRoot, object>> field)
-        {
-            throw new NotSupportedException();
-        }
-
-        public Task DropAllIndexes()
-        {
-            throw new NotSupportedException();
+            Container = new ConcurrentDictionary<string, TRoot>();
         }
     }
 }

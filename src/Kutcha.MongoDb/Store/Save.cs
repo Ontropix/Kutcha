@@ -10,28 +10,13 @@ namespace Kutcha.MongoDb
         public void Save(TRoot root)
         {
             ValidateRoot(root);
-            AsyncHelpers.RunSync(() => SaveAsync(root));
+            Collection.ReplaceOne(Filters.Eq(x => x.Id, root.Id), root, Upsert);
         }
 
         public async Task SaveAsync(TRoot root)
         {
             ValidateRoot(root);
-            await Collection.ReplaceOneAsync(Filters.Eq(x => x.Id, root.Id),
-                                             root,
-                                             new UpdateOptions()
-                                             {
-                                                 IsUpsert = true
-                                             });
-        }
-
-        public void SaveMany(List<TRoot> roots)
-        {
-            roots.ForEach(ValidateRoot);
-        }
-
-        public async Task SaveManyAsync(List<TRoot> roots)
-        {
-            await Task.Run(() => roots.ForEach(ValidateRoot));      
+            await Collection.ReplaceOneAsync(Filters.Eq(x => x.Id, root.Id), root, Upsert);
         }
     }
 }

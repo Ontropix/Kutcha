@@ -18,52 +18,40 @@ namespace Kutcha.MongoDb
             return await Collection.Find(Filters.Empty).ToListAsync();
         }
 
-        public TRoot GetById(string id)
+        public TRoot FindById(string id)
         {
             Argument.StringNotEmpty(id, "id");
             return Collection.Find(root => root.Id == id).FirstOrDefault();
         }
 
-        public async Task<TRoot> GetByIdAsync(string id)
+        public async Task<TRoot> FindByIdAsync(string id)
         {
             Argument.StringNotEmpty(id, "id");
             return await Collection.Find(root => root.Id == id).FirstOrDefaultAsync();
         }
 
-        public List<TRoot> GetByIds(ICollection<string> ids)
+        public List<TRoot> FindMany(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.ElementsNotEmpty(ids);
-            return Collection.Find(Filters.In(root => root.Id, ids)).ToList();
+            Argument.IsNotNull(filter, "filter");
+            return Collection.Find(filter).ToList();
         }
 
-        public async Task<List<TRoot>> GetByIdsAsync(ICollection<string> ids)
+        public async Task<List<TRoot>> FindManyAsync(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.ElementsNotEmpty(ids);
-            return await Collection.Find(Filters.In(root => root.Id, ids)).ToListAsync();
+            Argument.IsNotNull(filter, "filter");
+            return await Collection.Find(filter).ToListAsync();
         }
 
-        public List<TRoot> Where(Expression<Func<TRoot, bool>> whereExpression)
+        public TRoot FindOne(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return Collection.Find(whereExpression).ToList();
+            Argument.IsNotNull(filter, "filter");
+            return AsyncHelpers.RunSync(() => FindOneAsync(filter));
         }
 
-        public async Task<List<TRoot>> WhereAsync(Expression<Func<TRoot, bool>> whereExpression)
+        public async Task<TRoot> FindOneAsync(Expression<Func<TRoot, bool>> filter)
         {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return await Collection.Find(whereExpression).ToListAsync();
-        }
-
-        public TRoot FindOne(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return AsyncHelpers.RunSync(() => FindOneAsync(whereExpression));
-        }
-
-        public async Task<TRoot> FindOneAsync(Expression<Func<TRoot, bool>> whereExpression)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            return await Collection.Find(whereExpression).FirstOrDefaultAsync();
+            Argument.IsNotNull(filter, "filter");
+            return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<List<TRoot>> SortBy(Expression<Func<TRoot, object>> sortExpression, int skip, int take)

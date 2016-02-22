@@ -9,23 +9,20 @@ namespace Kutcha.MongoDb
         protected readonly IMongoCollection<TRoot> Collection;
         protected readonly FilterDefinitionBuilder<TRoot> Filters;
         protected readonly UpdateDefinitionBuilder<TRoot> Update;
+        private readonly UpdateOptions Upsert;
 
         public MongoKutchaStore(IMongoCollection<TRoot> collection)
         {
             Collection = collection;
             Filters = Builders<TRoot>.Filter;
             Update = Builders<TRoot>.Update;
-        }
-        
-        private void ValidateRoot(TRoot root)
-        {
-            Argument.IsNotNull(root, "root");
-            Argument.StringNotEmpty(root.Id, "root.Id");
+            Upsert = new UpdateOptions { IsUpsert = true };
         }
 
-        public void Drop()
+        private void ValidateRoot(TRoot root)
         {
-            throw new NotSupportedException();
+            Argument.IsNotNull(root, nameof(root));
+            Argument.StringNotEmpty(root.Id, nameof(root.Id));
         }
 
         public void Truncate()

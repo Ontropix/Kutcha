@@ -22,27 +22,5 @@ namespace Kutcha.InMemory.ReadOnly
             Func<TRoot, object> sort = sortExpression.Compile();
             return await Task.FromResult(Container.Values.OrderByDescending(sort).ToList());
         }
-
-        public async Task<List<TRoot>> SortBy(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take)
-        {
-            Argument.IsNotNull(sortExpression, "sortExpression");
-            Func<TRoot, bool> where = whereExpression.Compile();
-            Func<TRoot, object> sort = sortExpression.Compile();
-
-            List<TRoot> result = Container.Values.Where(where).OrderBy(sort).ToList();
-            return await Task.FromResult(result);
-        }
-
-        public async Task<List<TRoot>> SortByDescending(Expression<Func<TRoot, bool>> whereExpression, Expression<Func<TRoot, object>> sortExpression, int skip, int take)
-        {
-            Argument.IsNotNull(whereExpression, "whereExpression");
-            Argument.IsNotNull(sortExpression, "sortExpression");
-
-            Func<TRoot, bool> where = whereExpression.Compile();
-            Func<TRoot, object> sort = sortExpression.Compile();
-
-            List<TRoot> result = Container.Values.Where(where).OrderByDescending(sort).ToList();
-            return await Task.FromResult(result);
-        }
     }
 }
