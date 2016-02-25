@@ -19,7 +19,7 @@ namespace Kutcha.InMemory
             await Task.CompletedTask;
         }
 
-        public void Delete(Expression<Func<TRoot, bool>> filter)
+        public void DeleteMany(Expression<Func<TRoot, bool>> filter)
         {
             Argument.IsNotNull(filter, "filter");
             Func<TRoot, bool> whereFunc = filter.Compile();
@@ -33,9 +33,9 @@ namespace Kutcha.InMemory
             }
         }
 
-        public async Task DeleteAsync(Expression<Func<TRoot, bool>> filter)
+        public async Task DeleteManyAsync(Expression<Func<TRoot, bool>> filter)
         {
-            Delete(filter);
+            DeleteMany(filter);
             await Task.CompletedTask;
         }
     }

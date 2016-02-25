@@ -27,7 +27,7 @@ namespace Kutcha.Core
         void DeleteById(string id);
         Task DeleteByIdAsync(string id);
 
-        void Delete(Expression<Func<TRoot, bool>> filter);
-        Task DeleteAsync(Expression<Func<TRoot, bool>> filter);
+        void DeleteMany(Expression<Func<TRoot, bool>> filter);
+        Task DeleteManyAsync(Expression<Func<TRoot, bool>> filter);
     }
 }

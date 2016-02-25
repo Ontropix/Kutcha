@@ -18,13 +18,13 @@ namespace Kutcha.MongoDb
             await Collection.DeleteOneAsync(Filters.Eq(root => root.Id, id));
         }
 
-        public void Delete(Expression<Func<TRoot, bool>> filter)
+        public void DeleteMany(Expression<Func<TRoot, bool>> filter)
         {
             Argument.IsNotNull(filter, "filter");
             Collection.DeleteMany(filter);
         }
 
-        public async Task DeleteAsync(Expression<Func<TRoot, bool>> filter)
+        public async Task DeleteManyAsync(Expression<Func<TRoot, bool>> filter)
         {
             Argument.IsNotNull(filter, "filter");
             await Collection.DeleteManyAsync(filter);

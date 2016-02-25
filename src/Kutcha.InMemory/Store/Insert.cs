@@ -25,8 +25,8 @@ namespace Kutcha.InMemory
 
         public void InsertMany(ICollection<TRoot> roots)
         {
-            roots.ForEach(ValidateRoot);
-            roots.ForEach(root => Container.TryAdd(root.Id, root));
+            foreach (TRoot root in roots) ValidateRoot(root);
+            foreach (TRoot root in roots) Container.TryAdd(root.Id, root);
         }
 
         public async Task InsertManyAsync(ICollection<TRoot> roots)

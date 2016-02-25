@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Kutcha.MongoDb
@@ -20,13 +19,13 @@ namespace Kutcha.MongoDb
 
         public void InsertMany(ICollection<TRoot> roots)
         {
-            roots.ForEach(ValidateRoot);
+            foreach(TRoot root in roots) ValidateRoot(root);
             Collection.InsertMany(roots);
         }
 
         public async Task InsertManyAsync(ICollection<TRoot> roots)
         {
-            roots.ForEach(ValidateRoot);
+            foreach (TRoot root in roots) ValidateRoot(root);
             await Collection.InsertManyAsync(roots);
         }
     }
