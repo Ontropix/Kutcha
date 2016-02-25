@@ -45,7 +45,7 @@ namespace Kutcha.MongoDb
         public TRoot FindOne(Expression<Func<TRoot, bool>> filter)
         {
             Argument.IsNotNull(filter, "filter");
-            return AsyncHelpers.RunSync(() => FindOneAsync(filter));
+            return Collection.Find(filter).FirstOrDefault();
         }
 
         public async Task<TRoot> FindOneAsync(Expression<Func<TRoot, bool>> filter)
@@ -64,8 +64,7 @@ namespace Kutcha.MongoDb
             int take)
         {
             Argument.IsNotNull(sortExpression, "sortExpression");
-            return
-                await Collection.Find(Filters.Empty).SortByDescending(sortExpression).Skip(skip).Limit(take).ToListAsync();
+            return await Collection.Find(Filters.Empty).SortByDescending(sortExpression).Skip(skip).Limit(take).ToListAsync();
         }
     }
 }

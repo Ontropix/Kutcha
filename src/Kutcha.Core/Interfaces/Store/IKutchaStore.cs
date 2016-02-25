@@ -17,9 +17,6 @@ namespace Kutcha.Core
 
         void InsertMany(ICollection<TRoot> roots);
         Task InsertManyAsync(ICollection<TRoot> roots);
-        
-        void Replace(TRoot root);
-        Task ReplaceAsync(TRoot root);
 
         void Save(TRoot root);
         Task SaveAsync(TRoot root);

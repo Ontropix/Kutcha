@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Kutcha.Core;
 using MongoDB.Driver;
 
@@ -23,6 +24,11 @@ namespace Kutcha.MongoDb
         {
             Argument.IsNotNull(root, nameof(root));
             Argument.StringNotEmpty(root.Id, nameof(root.Id));
+        }
+
+        private void ValidateRoots(ICollection<TRoot> roots)
+        {
+            foreach (TRoot root in roots) ValidateRoot(root);
         }
 
         public void Truncate()

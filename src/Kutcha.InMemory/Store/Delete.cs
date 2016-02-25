@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -22,14 +24,12 @@ namespace Kutcha.InMemory
         public void DeleteMany(Expression<Func<TRoot, bool>> filter)
         {
             Argument.IsNotNull(filter, "filter");
-            Func<TRoot, bool> whereFunc = filter.Compile();
+            Func<TRoot, bool> where = filter.Compile();
 
-            foreach (TRoot document in Container.Values)
+            List<string> idsForDelete = Container.Values.Where(x => where.Invoke(x)).Select(x => x.Id).ToList();
+            foreach (string id in idsForDelete)
             {
-                if (whereFunc.Invoke(document))
-                {
-                    DeleteById(document.Id);
-                }
+                DeleteById(id);
             }
         }
 

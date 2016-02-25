@@ -19,13 +19,13 @@ namespace Kutcha.MongoDb
 
         public void InsertMany(ICollection<TRoot> roots)
         {
-            foreach(TRoot root in roots) ValidateRoot(root);
+            ValidateRoots(roots);
             Collection.InsertMany(roots);
         }
 
         public async Task InsertManyAsync(ICollection<TRoot> roots)
         {
-            foreach (TRoot root in roots) ValidateRoot(root);
+            ValidateRoots(roots);
             await Collection.InsertManyAsync(roots);
         }
     }

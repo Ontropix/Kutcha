@@ -52,9 +52,6 @@
     <Compile Include="..\LinkedFiles\Argument.cs">
       <Link>LinkedFiles\Argument.cs</Link>
     </Compile>
-    <Compile Include="..\LinkedFiles\AsyncHelper.cs">
-      <Link>LinkedFiles\AsyncHelper.cs</Link>
-    </Compile>
     <Compile Include="..\LinkedFiles\Maybe.cs">
       <Link>LinkedFiles\Maybe.cs</Link>
     </Compile>
